@@ -1,6 +1,9 @@
 var app = require('./app');
 const PORT = process.env.PORT || 5000;
+const db = require('./models');
 
-app.listen(PORT, () => {
-    console.log(`app is running on ${PORT}`);
+db.sequelize.sync().then(function () {
+    app.listen(PORT, () => {
+        console.log(`app is running on ${PORT}`);
+    })
 })

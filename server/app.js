@@ -2,11 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const db = require('./models');
 
 const morgan = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 
 
@@ -15,33 +17,36 @@ const app = express();
 
 
 // Middleware
-app.use(bodyParser.urlencoded({extended: false}));
-
+app.use(express.static(path.join(__dirname,'../client')))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 
 app.use(cookieParser());
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
-    res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
-    next();
-});
+const options = {
+    "username": "sql12252060",
+    "password": "ZhgGIqD133",
+    "database": "sql12252060",
+    "host": "sql12.freemysqlhosting.net",
+}
 app.use(session({
-    secret: 'secret',
+    secret: 'sdfsdfsdfsd',
     resave: false,
-    domain: '.localhost:3000',
+    store: new SequelizeStore({
+        db: db.sequelize
+    }),
     saveUninitialized: false,
-    cookie:  {
-        domain: '.localhost:3000',
-        maxAge: 24 * 6 * 60 * 10000
-    },
-}))
 
+}));
 
+// app.use(function(req, res, next) {
+//     res.header('Access-Control-Allow-Origin', "*");
+//     res.header('Access-Control-Allow-Credentials', true);
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     next();
+// });
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -51,5 +56,9 @@ app.use(passport.session());
 
 app.use('/users', require('./routes/user.route'))
 
+app.get('/',(req,res)=>{
+
+    res.sendFile(path.join(__dirname,'../client/index.html'));
+})
 
 module.exports = app;

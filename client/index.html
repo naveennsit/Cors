@@ -8,27 +8,55 @@
     <script src="jquery.js"></script>
 </head>
 <body>
-<script>
-    $(function () {
-        $.ajax({
-            url: 'http://localhost:5000/users/login',
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({id: 5}),
-            dataType: 'json',
-            xhrFields: {
-                withCredentials: true,
+<div class="container">
+    <nav>
+        <ul class="navigation_header">
+            <li class="login"><a>Login</a></li>
+            <li class="logout"><a>Logout</a></li>
+            <li class="registration"><a>Registration</a></li>
+        </ul>
+    </nav>
 
-            },
-            crossDomain: true,
-            success: function () {
-                console.log('success');
-            },
-            error: function () {
-                console.log('error')
-            }
-        });
-    })
-</script>
+    <!-- Registration Screen-->
+    <div class="reg_form hide">
+        <div>
+            <label>Email</label>
+            <input type="email" id="user_email"/>
+        </div>
+
+        <div>
+            <label>Password</label>
+            <input type="password" id="user_password"/>
+        </div>
+
+
+        <div>
+            <label>Re-Password</label>
+            <input type="password" id="user_reenter_password"/>
+        </div>
+        <button id="reg_submit">Submit</button>
+    </div>
+
+    <!-- Registration Screen end -->
+
+
+    <!-- Login app -->
+    <div class="login_form">
+        <div>
+            <label>Email</label>
+            <input type="email" id="login_email"/>
+        </div>
+
+        <div>
+            <label>Password</label>
+            <input type="password" id="login_password"/>
+        </div>
+
+
+        <button id="login_submit">Login</button>
+    </div>
+    <!-- Login app -->
+</div>
+<script src="app/app.js"></script>
 </body>
 </html>
